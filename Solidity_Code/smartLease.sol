@@ -9,7 +9,7 @@ contract smartLease {
   		bytes16 tenantEthAddr;
     }
     
-    struct Instructor2 { 
+    struct leaseDetails2 { 
   		bytes16 startDate;
   		bytes16 rent;
   		bytes16 deposit;
@@ -28,7 +28,7 @@ contract smartLease {
        	leaseDetails.tenantName = _tenantName;
        	leaseDetails.tenantEthAddr = _tenantEthAddr;        
         leaseAccounts.push(add1) -1;
-   }
+    }
    
     function setDetails2(bytes16 _startDate, bytes16 _rent, bytes16 _deposit, bytes16 _clause) public {
        	var leaseDetails = LeaseDetails2[add1];
@@ -37,7 +37,7 @@ contract smartLease {
        	leaseDetails.deposit = _deposit;
        	leaseDetails.clause = _clause;
         leaseAccounts.push(add1) -1;
-   }
+    }
    
     function getLeaseDetails1(address _address) view public returns (bytes16, bytes16, bytes16, bytes16) {
         return (LeaseDetails1[_address].ownerName, LeaseDetails1[_address].ownerEthAddr, LeaseDetails1[_address].tenantName, LeaseDetails1[_address].tenantEthAddr);
