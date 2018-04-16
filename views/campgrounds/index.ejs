@@ -1,13 +1,15 @@
 <% include ../partials/header %> 
 
      <!--<header class="jumbotron">-->
-         <div style="text-align:center" class="container">
-             <h1><span class="glyphicon glyphicon-home"></span> Welcome To Smart Lease</h1>
-             <p>Rent a house hassle free</p>
-             <p>
+    <div style="text-align:center" class="container">
+        <h1><span class="glyphicon glyphicon-home"></span> Welcome To Smart Lease</h1>
+        <p>Rent a house hassle free</p>
+        <% if(currentUser.userType === "landlord") { %>
+            <p>
                 <a class="btn btn-primary btn-lg" href="/campgrounds/new">Create New Lease Agreement</a>
-             </p>
-         </div>
+            </p>
+        <% } %>    
+    </div>
      <!--</header>-->
      <div class="container">
         <h1>Existing Leases</h1>

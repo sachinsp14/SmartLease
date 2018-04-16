@@ -23,6 +23,10 @@
                         <em>Submitted by: <%= campground.ownerName %>, <%= moment(campground.createdAt).fromNow() %></em>
                     </p>
                     <% if(!campground.active){ %>
+                        <div class="form-group">
+                            <label>Lease Key: </label>
+                            <input class="form-control" type="text" name="leaseKey" id="leaseKey" placeholder="Lease Key">
+                        </div>
                         <div class="col-md-5">
                         </div>
                         <div>
