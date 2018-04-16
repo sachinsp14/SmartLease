@@ -24,7 +24,8 @@ router.post("/register", function(req, res){
         req.flash("error", "Passwords do not match.");
         return res.render("register");
     }
-    var newUser = new User({username: req.body.username, email:req.body.email, phone:req.body.phone});
+    var newUser = new User({username: req.body.username, email:req.body.email, userType:req.body.user, ethAddr:req.body.ethAddr});
+    
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);

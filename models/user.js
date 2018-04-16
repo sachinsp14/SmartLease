@@ -2,10 +2,11 @@ var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
 
 var UserSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    phone: Number,
-    password: String
+    username: { type : String , unique : true, required : true },
+    email: { type : String , unique : true, required : true },
+    userType: { type : String , required : true },
+    password: String,
+    ethAddr: { type : String , unique : true, required : true }
 });
 
 UserSchema.plugin(passportLocalMongoose);

@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
 
 var campgroundSchema = new mongoose.Schema({
-   user: String,
    ownerName: String,
    ownerEthAddr: String,
    tenantName: String,
@@ -13,6 +12,7 @@ var campgroundSchema = new mongoose.Schema({
    rent: Number,
    deposit: Number,
    contractClause: String,
+   active: Boolean,
    createdAt: {type: Date, default: Date.now},
    author: {
       id: {

@@ -1,0 +1,66 @@
+<% include ../partials/header %>
+    <div class="row">
+        <div class="col-md-3">
+            <!--<p class="lead">Smart Lease</p>-->
+            <div class="list-group">
+                <li class="list-group-item active">Contact</li>
+                <li class="list-group-item">About</li>
+                <li class="list-group-item">More Info</li>
+            </div>
+            <div id="map"></div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail"> 
+                <div class="caption-full">
+                    <h4 class="pull-right">$<%= campground.rent %>/month</h4>
+                    <% if(campground.active){ %>
+                        <span class="badge badge-success">Active</span>
+                    <% } %>    
+                    <h4><strong>Address: </strong><%=campground.location%></h4>
+                    <p><%= campground.address %></p>
+                    <p><%= campground.contractClause %></p>
+                    <p>
+                        <em>Submitted by: <%= campground.ownerName %>, <%= moment(campground.createdAt).fromNow() %></em>
+                    </p>
+                    <% if(!campground.active){ %>
+                        <div class="col-md-5">
+                        </div>
+                        <div>
+                            <p>
+                                <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">Sign Lease</a>
+                            </p>
+                        </div>    
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function initMap() {
+            var lat = <%= campground.lat %>;
+            var lng = <%= campground.lng %>;
+            var center = {lat: lat, lng: lng };
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 8,
+                center: center,
+                scrollwheel: false
+            });
+            var contentString = `
+              <strong><%= campground.name %><br />
+              <%= campground.location %></strong>
+              <p><%= campground.description %></p>
+            `
+            var infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: center,
+                map: map
+            });
+            marker.addListener('click', function() {
+              infowindow.open(map, marker);
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDttjD6qJxRJ06pnFPGAl---pv0O8yrReY&callback=initMap"></script>
+<% include ../partials/footer %>
