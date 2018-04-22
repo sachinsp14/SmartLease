@@ -12,13 +12,26 @@
         <div class="col-md-9">
             <div class="thumbnail"> 
                 <div class="caption-full">
-                    <h4 class="pull-right">$<%= campground.rent %>/month</h4>
-                    <h4><strong>Address: </strong><%=campground.location%></h4>
-                    <p><%= campground.address %></p>
-                    <p><%= campground.contractClause %></p>
-                    <p>
-                        <em>Submitted by: <%= campground.ownerName %>, <%= moment(campground.createdAt).fromNow() %></em>
-                    </p>
+                    <center><h2><strong>Lease Details</strong></h2></center>
+                    <% if(campground.active){ %>
+                        <span class="badge progress-bar-success pull-right">Active</span>
+                    <% } else { %>
+                        <span class="badge progress-bar-danger pull-right">Inactive</span>
+                    <% } %>
+                    <br></br>
+                    <h4><strong>Owner Name: </strong><%= campground.ownerName %> </h4>
+                    <h4><strong>Owner Ethereum Address: </strong><%= campground.ownerEthAddr %></h4>
+                    <h4><strong>Tenant Name: </strong><%= campground.tenantName %> </h4>
+                    <h4><strong>Tenant Ethereum Address: </strong><%= campground.tenantEthAddr %></h4>
+                    <h4><strong>Lease Address: </strong><%= campground.address %></h4>
+                    <h4><strong>Deposit: </strong>$<%= campground.deposit %></h4>
+                    <h4><strong>Rent: </strong>$<%= campground.rent %>/month</h4>
+                    <h4><strong>Lease Start Date: </strong><%= campground.startDate %></h4>
+                    <h4><strong>Lease Clauses: </strong><%= campground.contractClause %></h4>
+                    
+                    <h4>
+                        <strong>Lease Created </strong>: <%= moment(campground.createdAt).fromNow() %>
+                    </h4>
                 </div>
             </div>
         </div>

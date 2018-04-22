@@ -1,5 +1,4 @@
 var Web3 = require('web3');
-var web3 = new Web3();
 var express = require("express");
 var router  = express.Router();
 var Campground = require("../models/campground");
@@ -140,6 +139,49 @@ router.get("/:id", function(req, res){
             }
         }
     });
+});
+
+router.get("/:id/sign", middleware.isLoggedIn, function(req, res){
+    // Campground.findByIdAndUpdate(req.params.id, req.body.)
+    // res.render("campgrounds/id/pay");
+    console.log("Sign");
+    Campground.findById(req.params.id).exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            if(req.user.userType === "landlord")
+            {
+                console.log(foundCampground);
+                res.render("campgrounds/show", {campground: foundCampground});
+            }
+            else if(req.user.userType === "tenant")
+            {
+                console.log(foundCampground);
+                res.render("campgrounds/tenant", {campground: foundCampground});
+            }
+        }
+    });
+    // res.render("campgrounds/")
+});
+
+router.get("/:id/pay", middleware.isLoggedIn, function(req, res){
+    Campground.findById(req.params.id).exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            if(req.user.userType === "landlord")
+            {
+                console.log(foundCampground);
+                res.render("campgrounds/show", {campground: foundCampground});
+            }
+            else if(req.user.userType === "tenant")
+            {
+                console.log(foundCampground);
+                res.render("campgrounds/tenant", {campground: foundCampground});
+            }
+        }
+    });
+    console.log("Pay");
 });
 
 module.exports = router;
