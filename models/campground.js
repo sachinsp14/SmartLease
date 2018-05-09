@@ -13,6 +13,7 @@ var campgroundSchema = new mongoose.Schema({
    deposit: Number,
    contractClause: String,
    active: Boolean,
+   terminate: Boolean,
    createdAt: {type: Date, default: Date.now},
    author: {
       id: {

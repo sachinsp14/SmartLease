@@ -41,17 +41,18 @@ router.get("/", function(req, res){
     // Campground.findById(req.user.id, function(err, foundCampground){
     if(req.user.userType === "landlord")
     {
+        console.log(req.user.ethAddr);
         Campground.find({"ownerEthAddr": req.user.ethAddr}, function(err, foundCampground){
            if(err)
            {
                console.log(err);
            } else
            {
-                if (!err && res.statusCode == 200)
-                {
-                    console.log(foundCampground); // Show the HTML for the Modulus homepage.
+                // if (!err && res.statusCode == 200)
+                // {
+                    console.log(foundCampground);
                     res.render("campgrounds/index", {campgrounds: foundCampground});
-                }
+                // }
             }
         });
     }
@@ -63,11 +64,10 @@ router.get("/", function(req, res){
                console.log(err);
            } else
            {
-                if (!err && res.statusCode == 200)
-                {
-                    console.log(foundCampground); // Show the HTML for the Modulus homepage.
+                // if (!err && res.statusCode == 200)
+                // {
                     res.render("campgrounds/index", {campgrounds: foundCampground});
-                }
+                // }
             }
         });
     }
@@ -100,7 +100,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
         var lat = data.results[0].geometry.location.lat;
         var lng = data.results[0].geometry.location.lng;
         var location = data.results[0].formatted_address;
-        var newCampground = {ownerName: ownerName, ownerEthAddr: ownerEthAddr, tenantName: tenantName, tenantEthAddr:tenantEthAddr, address:location, lat:lat, lng:lng, startDate:startDate, rent:rent, deposit:deposit, contractClause:contractClause, active:'false', author:author};
+        var newCampground = {ownerName: ownerName, ownerEthAddr: ownerEthAddr, tenantName: tenantName, tenantEthAddr:tenantEthAddr, address:location, lat:lat, lng:lng, startDate:startDate, rent:rent, deposit:deposit, contractClause:contractClause, active:'false', termiante: 'false', author:author};
         console.log(newCampground);
         // Create a new campground and save to DB
         Campground.create(newCampground, function(err, newlyCreated){
@@ -110,6 +110,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
                 //redirect back to campgrounds page
                 console.log(newlyCreated);
                 res.redirect("/campgrounds");
+                req.flash("success", "Lease Agreement successfully created.");
             }
         });
     });
@@ -142,22 +143,16 @@ router.get("/:id", function(req, res){
 });
 
 router.get("/:id/sign", middleware.isLoggedIn, function(req, res){
-    // Campground.findByIdAndUpdate(req.params.id, req.body.)
-    // res.render("campgrounds/id/pay");
-    console.log("Sign");
-    Campground.findById(req.params.id).exec(function(err, foundCampground){
+    Campground.update({"_id" : req.params.id},{$set:{"active": "true"}}).exec(function(err, foundCampground){
         if(err){
             console.log(err);
         } else {
-            if(req.user.userType === "landlord")
+            if(req.user.userType === "tenant")
             {
-                console.log(foundCampground);
-                res.render("campgrounds/show", {campground: foundCampground});
-            }
-            else if(req.user.userType === "tenant")
-            {
+                console.log("Lease signed");
                 console.log(foundCampground);
                 res.render("campgrounds/tenant", {campground: foundCampground});
+                req.flash("success", "Lease signed successfully. Lease is now Active");
             }
         }
     });
@@ -169,19 +164,41 @@ router.get("/:id/pay", middleware.isLoggedIn, function(req, res){
         if(err){
             console.log(err);
         } else {
-            if(req.user.userType === "landlord")
+            if(req.user.userType === "tenant")
             {
-                console.log(foundCampground);
-                res.render("campgrounds/show", {campground: foundCampground});
-            }
-            else if(req.user.userType === "tenant")
-            {
-                console.log(foundCampground);
+                console.log("Rent paid");
                 res.render("campgrounds/tenant", {campground: foundCampground});
+                req.flash("success", "Monthly rent paid successfully.");
             }
         }
     });
-    console.log("Pay");
+});
+
+router.get("/:id/withdraw", middleware.isLoggedIn, function(req, res){
+    Campground.findById(req.params.id).exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            if(req.user.userType === "landlord")
+            {
+                console.log("Rent paid");
+                res.render("campgrounds/show", {campground: foundCampground});
+                req.flash("success", "Rent successfully withdrawn");
+            }
+        }
+    });
+});
+
+router.get("/:id/terminate", middleware.isLoggedIn, function(req, res){
+    Campground.update({"_id" : req.params.id},{$set:{"terminate": "true"}}).exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Rent paid");
+            res.render("campgrounds/show", {campground: foundCampground});
+            req.flash("success", "Lease successfully terminated.");
+        }
+    });
 });
 
 module.exports = router;

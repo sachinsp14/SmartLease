@@ -13,10 +13,12 @@
             <div class="thumbnail"> 
                 <div class="caption-full">
                     <center><h2><strong>Lease Details</strong></h2></center>
-                    <% if(campground.active){ %>
+                    <% if(campground.active && !campground.terminate){ %>
                         <span class="badge progress-bar-success pull-right">Active</span>
-                    <% } else { %>
+                    <% } else if(!campground.active && !campground.terminate) { %>
                         <span class="badge progress-bar-danger pull-right">Inactive</span>
+                    <% } else { %>
+                        <span class="badge progress-bar-danger pull-right">Terminated</span>
                     <% } %>
                     <br></br>
                     <h4><strong>Owner Name: </strong><%= campground.ownerName %> </h4>
@@ -33,6 +35,15 @@
                         <strong>Lease Created </strong>: <%= moment(campground.createdAt).fromNow() %>
                     </h4>
                 </div>
+                <% if(campground.active && !campground.terminate){ %>
+                    <div class="col-md-5">
+                    </div>
+                    <div>
+                        <p>
+                            <a href="/campgrounds/<%= campground._id %>/terminate" class="btn btn-primary">Terminate Lease</a>
+                        </p>
+                    </div>
+                <% } %>    
             </div>
         </div>
     </div>
